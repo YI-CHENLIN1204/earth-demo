@@ -2,11 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>High Res Earth</title>
+    <title>High Res Earth with All Maps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      body { margin: 0; background: black; }
-      canvas { display: block; }
+      body {
+        margin: 0;
+        background: black;
+      }
+      canvas {
+        display: block;
+      }
     </style>
     <script type="importmap">
       {
@@ -30,37 +35,48 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // 材質貼圖載入器
       const loader = new THREE.TextureLoader();
 
-      const earthTexture = loader.load('./textures/planets/earth_day_8k.jpg');
+      // 貼圖讀取
+      const dayMap = loader.load('./textures/planets/earth_day_8k.jpg');
+      const nightMap = loader.load('./textures/planets/earth_night_8k.jpg');
       const normalMap = loader.load('./textures/planets/earth_normal_8k.jpg');
       const specularMap = loader.load('./textures/planets/earth_specular_8k.jpg');
+      const cloudMap = loader.load('./textures/planets/earth_clouds_8k.jpg');
 
-      const geometry = new THREE.SphereGeometry(1, 64, 64);
-      const material = new THREE.MeshPhongMaterial({
-        map: earthTexture,
+      // 地球本體材質 (包含白天、法線、反射)
+      const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
+      const earthMaterial = new THREE.MeshPhongMaterial({
+        map: dayMap,
         normalMap: normalMap,
         specularMap: specularMap,
         specular: new THREE.Color('grey'),
         shininess: 10
       });
-      const earth = new THREE.Mesh(geometry, material);
-      scene.add(earth);
+      const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+      scene.add(earthMesh);
 
-      // 雲層（透明球）
-      const cloudTexture = loader.load('./textures/planets/earth_clouds_8k.jpg');
+      // 夜晚材質 (貼在第二球體上)
+      const nightMaterial = new THREE.MeshBasicMaterial({
+        map: nightMap,
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        depthWrite: false
+      });
+      const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial);
+      scene.add(nightMesh);
+
+      // 雲層貼圖 (外殼球體)
+      const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64);
       const cloudMaterial = new THREE.MeshLambertMaterial({
-        map: cloudTexture,
+        map: cloudMap,
         transparent: true
       });
-      const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); // 略大一點
-      const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-      scene.add(clouds);
+      const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      scene.add(cloudMesh);
 
       // 燈光
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-      scene.add(ambientLight);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
       const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
       directionalLight.position.set(5, 3, 5);
       scene.add(directionalLight);
@@ -68,14 +84,15 @@
       // 控制器
       const controls = new OrbitControls(camera, renderer.domElement);
 
+      // 動畫
       function animate() {
         requestAnimationFrame(animate);
-        earth.rotation.y += 0.001;
-        clouds.rotation.y += 0.0012;
+        earthMesh.rotation.y += 0.001;
+        nightMesh.rotation.y += 0.001;
+        cloudMesh.rotation.y += 0.0012;
         controls.update();
         renderer.render(scene, camera);
       }
-
       animate();
     </script>
   </body>
