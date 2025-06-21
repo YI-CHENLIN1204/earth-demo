@@ -60,7 +60,7 @@ const cloudGeometry = new THREE.SphereGeometry(1.005, 64, 64);
 const cloudMaterial = new THREE.MeshLambertMaterial({
   map: cloudMap,
   transparent: true,
-  opacity: 0.2,
+  opacity: 0.3,
   depthWrite: false
 });
 const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
@@ -80,7 +80,7 @@ camera.position.z = 2.5;
 function animate() {
   requestAnimationFrame(animate);
   earth.rotation.y += 0.0005;
-  clouds.rotation.y += 0.0007; // 雲層稍微快一點
+  clouds.rotation.y += 0.0008; // 雲層稍微快一點
   controls.update();
   renderer.render(scene, camera);
 }
