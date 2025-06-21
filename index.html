@@ -27,6 +27,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+
 // === 場景與相機 ===
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -42,13 +43,20 @@ const normalMap = textureLoader.load('./textures/planets/earth_normal_8k.jpg');
 const specularMap = textureLoader.load('./textures/planets/earth_specular_8k.jpg');
 const cloudMap = textureLoader.load('./textures/planets/earth_clouds_8k.png');
 
+
+// 提高貼圖品質
+colorMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
+normalMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
+specularMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
+cloudMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
 // 地球表面
 const earthMaterial = new THREE.MeshPhongMaterial({
   map: colorMap,
   normalMap: normalMap,
   specularMap: specularMap,
   specular: new THREE.Color('darkgrey'),
-  shininess: 50
+  shininess: 10
 });
 
 const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
@@ -70,7 +78,9 @@ scene.add(clouds);
 // === 燈光 ===
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
-
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+directionalLight.position.set(5, 3, 5);
+scene.add(directionalLight);
 // === 控制器 ===
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
