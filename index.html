@@ -1,48 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>three.js webgpu - earth</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
-	</head>
-	<body>
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>High Res Earth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body { margin: 0; background: black; }
+      canvas { display: block; }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from 'three';
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-<script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 3;
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
 
-// 地球球體
-const geometry = new THREE.SphereGeometry(1, 64, 64);
-const texture = new THREE.TextureLoader().load('./textures/planets/earth_day_8192.jpg');
-const material = new THREE.MeshBasicMaterial({ map: texture });
-const globe = new THREE.Mesh(geometry, material);
-scene.add(globe);
+      // 材質貼圖載入器
+      const loader = new THREE.TextureLoader();
 
-// OrbitControls 滑鼠旋轉
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
+      const earthTexture = loader.load('./textures/planets/earth_day_8k.jpg');
+      const normalMap = loader.load('./textures/planets/earth_normal_8k.jpg');
+      const specularMap = loader.load('./textures/planets/earth_specular_8k.jpg');
 
-camera.position.z = 3;
+      const geometry = new THREE.SphereGeometry(1, 64, 64);
+      const material = new THREE.MeshPhongMaterial({
+        map: earthTexture,
+        normalMap: normalMap,
+        specularMap: specularMap,
+        specular: new THREE.Color('grey'),
+        shininess: 10
+      });
+      const earth = new THREE.Mesh(geometry, material);
+      scene.add(earth);
 
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update(); // ⚠️ 一定要有這行
-  renderer.render(scene, camera);
-}
-animate();
-</script>
+      // 雲層（透明球）
+      const cloudTexture = loader.load('./textures/planets/earth_clouds_8k.jpg');
+      const cloudMaterial = new THREE.MeshLambertMaterial({
+        map: cloudTexture,
+        transparent: true
+      });
+      const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); // 略大一點
+      const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      scene.add(clouds);
+
+      // 燈光
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      directionalLight.position.set(5, 3, 5);
+      scene.add(directionalLight);
+
+      // 控制器
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        earth.rotation.y += 0.001;
+        clouds.rotation.y += 0.0012;
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
