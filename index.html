@@ -79,8 +79,8 @@ camera.position.z = 2.5;
 // === 動畫 ===
 function animate() {
   requestAnimationFrame(animate);
-  earth.rotation.y += 0.001;
-  clouds.rotation.y += 0.0012; // 雲層稍微快一點
+  earth.rotation.y += 0.0001;
+  clouds.rotation.y += 0.00012; // 雲層稍微快一點
   controls.update();
   renderer.render(scene, camera);
 }
