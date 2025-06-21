@@ -57,11 +57,11 @@
       scene.add(earthMesh);
 
       // 夜晚材質 (貼在第二球體上)
-      const nightMaterial = new THREE.MeshBasicMaterial({
-        map: nightMap,
-        blending: THREE.AdditiveBlending,
-        transparent: true,
-        depthWrite: false
+      //const nightMaterial = new THREE.MeshBasicMaterial({
+       // map: nightMap,
+       // blending: THREE.AdditiveBlending,
+      //  transparent: true,
+      //  depthWrite: false
       });
       const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial);
       scene.add(nightMesh);
