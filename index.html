@@ -53,14 +53,14 @@ specularMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
 cloudMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
 // 地球表面
-const earthMaterial = new THREE.MeshPhongMaterial({
+const earthMaterial = new THREE.MeshStandardMaterial({
   map: colorMap,
   normalMap: normalMap,
   specularMap: specularMap,
-  specular: new THREE.Color('darkgrey'),
-  shininess: 10
-  emissive: new THREE.Color(0x111111),        // 加上自發光
-  emissiveIntensity: 0.6                      // 可微調至 0.4~1.0
+  roughness: 0.6,
+  metalness: 0.1,
+  emissive: new THREE.Color(0x222222),
+  emissiveIntensity: 0.6               
 });
 
 const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
