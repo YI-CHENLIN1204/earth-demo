@@ -17,6 +17,7 @@
       {
         "imports": {
           "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/environments/RoomEnvironment.js": "https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js",
           "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
         }
       }
@@ -40,8 +41,13 @@
       const renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.4;
+      renderer.toneMappingExposure = 1.8;
       document.body.appendChild(renderer.domElement);
+      import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      const envMap = pmremGenerator.fromScene(new RoomEnvironment());
+      scene.environment = envMap.texture;
+
 
       // 載入材質
       const loader = new THREE.TextureLoader();
