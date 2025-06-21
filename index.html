@@ -68,7 +68,7 @@ const cloudGeometry = new THREE.SphereGeometry(1.005, 64, 64);
 const cloudMaterial = new THREE.MeshLambertMaterial({
   map: cloudMap,
   transparent: true,
-  opacity: 0.3,
+  opacity: 0.1,
   depthWrite: false
 });
 const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
