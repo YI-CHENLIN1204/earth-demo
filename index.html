@@ -68,7 +68,7 @@ const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 scene.add(earth);
 
 // 雲層（透明貼圖 + 加點厚度）
-const cloudGeometry = new THREE.SphereGeometry(1.5, 64, 64);
+const cloudGeometry = new THREE.SphereGeometry(1.025, 64, 64);
 const cloudMaterial = new THREE.MeshLambertMaterial({
   map: cloudMap,
   transparent: true,
