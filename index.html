@@ -80,11 +80,16 @@ scene.add(clouds);
 
 
 // === 燈光 ===
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
 scene.add(ambientLight);
+
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
 directionalLight.position.set(5, 3, 5);
 scene.add(directionalLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 0.8);
+pointLight.position.set(-3, -3, 2);
+scene.add(pointLight);
 // === 控制器 ===
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
