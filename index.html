@@ -41,7 +41,7 @@
       const renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.8;
+      renderer.toneMappingExposure = 1.6; // 增加亮度與鮮豔感
       document.body.appendChild(renderer.domElement);
       import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
       const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -96,6 +96,15 @@
       const cloudGeometry = new THREE.SphereGeometry(1.005, 64, 64);
       const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
       scene.add(clouds);
+      const atmosphereGeometry = new THREE.SphereGeometry(1.05, 64, 64);
+      const atmosphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0x88ccff,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.BackSide
+      });
+      const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+      scene.add(atmosphere);
 
       // 燈光
       scene.add(new THREE.AmbientLight(0xffffff, 0.6));
