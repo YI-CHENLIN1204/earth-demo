@@ -49,10 +49,6 @@
       const normalMap = loader.load('./textures/planets/earth_normal_8k.jpg');
       const specularMap = loader.load('./textures/planets/earth_specular_8k.jpg');
       const cloudMap = loader.load('./textures/planets/earth_clouds_8k.png');
-      colorMap.colorSpace = THREE.SRGBColorSpace;
-      normalMap.colorSpace = THREE.LinearSRGBColorSpace;
-      specularMap.colorSpace = THREE.LinearSRGBColorSpace;
-      cloudMap.colorSpace = THREE.SRGBColorSpace;
 
       // 提高貼圖品質
       const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
