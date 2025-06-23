@@ -62,14 +62,15 @@
       cloudMap.anisotropy = maxAnisotropy;
 
       // 地球材質
-      const earthMaterial = new THREE.MeshStandardMaterial({
-        map: colorMap,
-        normalMap: normalMap,
-        metalness: 0.2,
-        roughness: 0.5,
-        emissive: new THREE.Color(0x222222),
-        emissiveIntensity: 1.2
-      });
+     const earthMaterial = new THREE.MeshStandardMaterial({
+      map: colorMap,
+      normalMap: normalMap,
+      metalness: 0.3,             // 更金屬一點
+      roughness: 0.4,             // 更光滑
+      emissive: new THREE.Color(0x111111),
+      emissiveIntensity: 0.6,
+      envMapIntensity: 1.2        // 提升環境貼圖影響（需搭配 HDR）
+    });
 
       const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
       const earth = new THREE.Mesh(earthGeometry, earthMaterial);
