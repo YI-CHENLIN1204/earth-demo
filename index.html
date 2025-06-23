@@ -42,6 +42,10 @@
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 4.2;
       document.body.appendChild(renderer.domElement);
+      import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      const envMap = pmremGenerator.fromScene(new RoomEnvironment());
+      scene.environment = envMap.texture;
 
       // 載入材質
       const loader = new THREE.TextureLoader();
