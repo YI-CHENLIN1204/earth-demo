@@ -52,18 +52,18 @@
       const colorMap = loader.load('./textures/planets/5.jpg');
       const normalMap = loader.load('./textures/planets/earth_normal_8k.jpg');
       const specularMap = loader.load('./textures/planets/earth_specular_8k.jpg');
-      //const cloudMap = loader.load('./textures/planets/earth_clouds_8k.png');
+      const cloudMap = loader.load('./textures/planets/earth_clouds_8k.png');
       colorMap.colorSpace = THREE.SRGBColorSpace;
       normalMap.colorSpace = THREE.LinearSRGBColorSpace;
       specularMap.colorSpace = THREE.LinearSRGBColorSpace;
-      //cloudMap.colorSpace = THREE.SRGBColorSpace;
+      cloudMap.colorSpace = THREE.SRGBColorSpace;
 
       // 提高貼圖品質
       const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
       colorMap.anisotropy = maxAnisotropy;
       normalMap.anisotropy = maxAnisotropy;
       specularMap.anisotropy = maxAnisotropy;
-      //cloudMap.anisotropy = maxAnisotropy;
+      cloudMap.anisotropy = maxAnisotropy;
 
       // 地球材質
      const earthMaterial = new THREE.MeshStandardMaterial({
@@ -81,17 +81,17 @@
       scene.add(earth);
 
       // 雲層
-      //const cloudMaterial = new THREE.MeshLambertMaterial({
-      //  map: cloudMap,
-      //  transparent: true,
-      //  opacity: 0.8,
-      //  depthWrite: false,
-      //  side: THREE.DoubleSide
-     // });
+      const cloudMaterial = new THREE.MeshLambertMaterial({
+        map: cloudMap,
+        transparent: true,
+        opacity: 0.8,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
 
-     // const cloudGeometry = new THREE.SphereGeometry(1.005, 64, 64);
-    //  const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-    //  scene.add(clouds);
+      const cloudGeometry = new THREE.SphereGeometry(1.005, 64, 64);
+      const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      scene.add(clouds);
 
       // 燈光
       scene.add(new THREE.AmbientLight(0xffffff, 0.6));
@@ -112,7 +112,7 @@
       function animate() {
         requestAnimationFrame(animate);
         earth.rotation.y += 0.0005;
-       // clouds.rotation.y += 0.0008;
+        clouds.rotation.y += 0.0008;
         controls.update();
         renderer.render(scene, camera);
       }
